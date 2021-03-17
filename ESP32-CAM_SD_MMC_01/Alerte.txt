@@ -1,0 +1,13 @@
+void Alerte()
+{
+  digitalWrite(LED_BUILTIN,LOW);
+  EnCours=0;
+
+  Serial.println("Arret pour cause de moteur bloque");
+  Serial.println();
+
+  while (Alarme==1)
+    {
+    }
+
+}

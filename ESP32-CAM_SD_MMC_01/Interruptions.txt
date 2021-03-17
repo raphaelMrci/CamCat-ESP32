@@ -1,0 +1,10 @@
+void InterruptInit()
+{
+  EnCours=1;
+}
+
+void InterruptTour()
+{
+  Tours_courant--;
+  TempsPresent=millis();
+}

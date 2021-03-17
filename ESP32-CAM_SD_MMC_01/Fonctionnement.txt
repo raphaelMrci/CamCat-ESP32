@@ -1,0 +1,60 @@
+void Fonctionnement()
+{
+  detachInterrupt(digitalPinToInterrupt(EntreeDepart));
+
+  attachInterrupt(digitalPinToInterrupt(EntreeTours),InterruptTour,FALLING);
+
+  digitalWrite(LED_BUILTIN,HIGH);
+
+  NombreDeCycles++;
+
+  TempsPresent=millis();
+
+  if (NombreDeCycles==5)
+    {
+      digitalWrite (SortieLed2,HIGH);
+    }
+
+  while (Tours_courant>0)
+    {
+      if (Tours_courant==(Tours_initial-4))
+      {
+        if (NombreDeCycles==5)
+        {
+          NombreDeCycles=0;
+          digitalWrite (SortieLed2,LOW);
+        }
+      }
+    Serial.print("Nombre de tours parametres = ");
+    Serial.println(Tours_initial);
+
+    Serial.print("Nombre de tours restant = ");
+    Serial.println(Tours_courant);
+
+    Serial.print("Nombre de cycles = ");
+    Serial.println(NombreDeCycles);
+    Serial.println();
+
+    InstantSuivant=millis();
+
+    Retard=InstantSuivant-TempsPresent;
+
+    Serial.print("Instant initial = ");
+    Serial.println(TempsPresent);
+
+    Serial.print("Instant suivant = ");
+    Serial.println(InstantSuivant);
+
+    Serial.print("Retard = ");
+    Serial.println(Retard);
+
+      if (Retard>5000)
+      {
+        Alarme=1;
+        break;
+      }
+    }
+
+  digitalWrite(LED_BUILTIN,LOW);
+  EnCours=0;
+}

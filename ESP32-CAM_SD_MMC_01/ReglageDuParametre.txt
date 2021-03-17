@@ -1,0 +1,54 @@
+void ReglageDuParametre()
+{
+  Tours_courant=Tours_initial;
+
+  CaractereRecu=Serial.available();
+  Serial.print("Nombre de caracteres recus = ");
+  Serial.println(CaractereRecu);
+
+    if (CaractereRecu==1)
+    {
+    Action=Serial.read();
+    }
+
+  CaractereRecu=Serial.available();
+
+  while (CaractereRecu>0)
+    {
+    Serial.read(); 
+    CaractereRecu=Serial.available();
+    }
+
+  if (Action==43)
+    {
+    Tours_courant++;
+    }
+  
+  if (Action==45)
+    {
+    Tours_courant--;
+    }
+
+  if (Tours_courant>14)
+    {
+    Tours_courant=15;
+    }
+
+  if (Tours_courant<6)
+    {
+    Tours_courant=5;
+    }
+
+  Action=0;
+
+  Serial.print("Nombre de tours par defaut = ");
+  Serial.println(Tours_initial);
+
+  Serial.print("Nombre de tours parametres = ");
+  Serial.println(Tours_courant);
+  Serial.println();
+
+  Tours_initial=Tours_courant;
+
+//  delay (2000);
+}
