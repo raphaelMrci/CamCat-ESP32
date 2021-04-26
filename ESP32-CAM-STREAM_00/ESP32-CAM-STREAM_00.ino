@@ -132,10 +132,13 @@ static esp_err_t stream_handler(httpd_req_t *req){
     return res;
   }
 
-  char * encodedAuth, encodedAuthLen;
+  char * encodedAuth;
 
-  if (httpd_req_get_hdr_value_str(req, "Authorization", encodedAuth, encodedAuthLen) != ESP_OK){
+  if (httpd_req_get_hdr_value_str(req, "Authorization", encodedAuth, httpd_req_get_hdr_value_len(req,"Authorization")) != ESP_OK){
     httpd_resp_set_status(req, "401 Unauthorized");
+    httpd_resp_set_hdr(req, "WWW-Authenticate", "Basic realm='Camera access'");
+  } else {
+    Serial.println(encodedAuth);
   }
 
   while(true){
@@ -159,7 +162,6 @@ static esp_err_t stream_handler(httpd_req_t *req){
         }
       }
     }
-    Serial.println("test");
     if(res == ESP_OK){
       size_t hlen = snprintf((char *)part_buf, 64, _STREAM_PART, _jpg_buf_len);
       res = httpd_resp_send_chunk(req, (const char *)part_buf, hlen);
@@ -189,6 +191,7 @@ static esp_err_t stream_handler(httpd_req_t *req){
 void startCameraServer(){
   httpd_config_t config = HTTPD_DEFAULT_CONFIG();
   config.server_port = 80;
+  
 
   httpd_uri_t index_uri = {
     .uri       = "/",
@@ -247,8 +250,6 @@ void setup() {
     Serial.printf("Camera init failed with error 0x%x", err);
     return;
   }
-
-  Serial.println("Test init");
 
   //SD reading
   if(!SD_MMC.begin()){
